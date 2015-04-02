@@ -65,32 +65,9 @@ var model = {
 
 
 // ------- VIEW --------------
-/*
-function setPosition(){
 
-    for (marker in model.markers){
-console.log("inside geocode for loop");
-  geocoder = new google.maps.Geocoder();
-  geocoder.geocode({ 'address': model.markers[marker].address }, function(results, status) {    
-      console.log("inside geocode call");
-      console.log("marker is ", marker);
-      console.log("position is: ", model.markers[marker].position);
-      console.log("results location is ", results[0].geometry.location);
-      model.markers[marker].position = results[0].geometry.location;//after this line
-
-
-      console.log("after setting value");
-      console.log("position is: ", model.markers[marker].position);
-
-    });
-}
-}
-
-*/
 
 function initialize() {
-
- // setPosition();
   var mapOptions = {
     center: { lat: 47.6374701, lng: -122.3578885}, //Queen Anne Seattle
     zoom: 14
@@ -100,63 +77,20 @@ function initialize() {
   map.setOptions({draggableCursor:'url(http://maps.gstatic.com/mapfiles/openhand_8_8.cur),default'}); // trying to fix bug
   map.setOptions({draggingCursor:'url(http://maps.gstatic.com/mapfiles/closedhand_8_8.cur),default'}); // trying to fix bug
 
-  //original hard-coding
-  //model.markers.houseMarker.setMap(map);
-  //model.markers.WFMarker.setMap(map);
-  //model.markers.TJMarker.setMap(map);
-
-  //next iteration, use for loop to set
-  //for (marker in model.markers){
-  //  model.markers[marker].setMap(map);
-  //}
-
-  //current iteration - trying to use geocode with for loop
-
+  //current iteration - use geocode with for loop
   var geocoderCallback = function(marker){
-
     return function(results, status) {    
-      console.log("inside geocode call");
-      console.log("local marker is ", marker);
-      console.log("position is: ", model.markers[marker].position);
-      console.log("results location is ", results[0].geometry.location);
       model.markers[marker].position = results[0].geometry.location;
-      console.log("after setting value");
-      console.log("position is: ", model.markers[marker].position);
       model.markers[marker].setMap(map);
-
     }
   }
 
-
   for (marker in model.markers){
-    console.log("in for loop");
-    console.log("local marker is ", marker);
-    console.log("address is ", model.markers[marker].address);
     geocoder = new google.maps.Geocoder();
     geocoder.geocode({ 'address': model.markers[marker].address }, geocoderCallback(marker));
-    console.log("after geocode");
-    console.log("local marker is ", marker);
-    console.log("position is: ", model.markers[marker].position);
   }
-
-
-/*
-  for (marker in model.markers){
-    console.log("in SET MAP for loop");
-    console.log("marker is ", marker);
-    console.log("address is ", model.markers[marker].address);    
-    console.log("position is: ", model.markers[marker].position);
-    model.markers[marker].setMap(map);
-  }
-*/
-
 
 }
-
-
-
-
-
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
