@@ -92,13 +92,15 @@ var model = {
 
 // ------- VIEWMODEL --------------
 
+var map;
 
 function initialize() {
   var mapOptions = {
-    center: { lat: 47.6374701, lng: -122.3578885}, //Queen Anne Seattle
+//    center: { lat: 47.6374701, lng: -122.3578885}, //Queen Anne Seattle
+    center: new google.maps.LatLng(47.6374701,-122.3578885),
     zoom: 14
   };
-  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+  map = new google.maps.Map(document.getElementById('map-container'), mapOptions);
 
   // fixing bug in google code
   map.setOptions({draggableCursor:'url(http://maps.gstatic.com/mapfiles/openhand_8_8.cur),default'}); 
@@ -121,6 +123,10 @@ function initialize() {
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
-
+//google.maps.event.addDomListener(window, "resize", function() {
+//     var center = map.getCenter();
+//     google.maps.event.trigger(map, "resize");
+//     map.setCenter(center); 
+//    });
 
 

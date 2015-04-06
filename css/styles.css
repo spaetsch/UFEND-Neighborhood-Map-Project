@@ -1,6 +1,30 @@
-body {
+/*body {
 	background-color: gray;
 	font-family: 'Montserrat', sans-serif;
 }
 
-html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
+/*html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}*/
+
+
+/*#map-canvas iframe, #map-canvas object, #map-canvas embed { width: 100%; }*/
+
+
+
+
+body { background-color:#CCC; height: 100% }
+
+#map-outer {  height: 640px; 
+	  		padding: 20px; 
+			border: 2px solid #CCC; 
+			margin-bottom: 20px; 
+			background-color:#FFF }
+	  
+#map-container { height: 600px }
+
+#button {
+
+}
+
+.coffeeButton {
+	background: url(img/pins/coffee.png)
+}
