@@ -13,54 +13,34 @@
     </script>
     
     <script src="js/scripts.js"></script>
-    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-    <script>
-      $(function() {
-        $( "#check" ).button();
-       $( "#format" ).buttonset();
-      });
-    </script>
-
-  	<link rel="stylesheet" href="css/bootstrap.min.css">
+ 
+   	<link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 </head>
 
 <body>
 
 <div class="container">
-
-  <div id="map-outer" class="col-md-12">
-    
+  <div id="map-outer" class="col-md-12">    
     <div class="row">
-      <div id="map-label" class="col-md-12">
+      
+      <div id="sidebar" class="col-md-4">
+       
         <h2>Queen Anne Neighborhood Map</h2>
-      </div>
-    </div>
+        <div id="searchbox">
+          Search: <input type="text" name="search">
+        </div>      
+        
+        <h4>Results:</h4>
+        <div id="map-list"> </div>
+      
+      </div> <!--sidebar-->
 
-    <div class="row">
-      <div id="searchbar">
-      Search by Name: <input type="text" name="search">
-    </div>
-    </div>
+      <div id="map-container" class="col-md-8"> </div>
+    
 
-    <div class="row">
-      <div id="format">
-        Filter by type:
-        <input type="checkbox" id="check1"><label for="check1">Coffee</label>
-        <input type="checkbox" id="check2"><label for="check2">Grocery</label>
-        <input type="checkbox" id="check3"><label for="check3">Park</label>
-        <input type="checkbox" id="check4"><label for="check4">Restaurant</label>
-      </div>
-    </div>
-
-    <div class="row">
-      <div id="map-container" class="col-md-12"> </div>
-    </div>
-  
-  </div> <!--map outer-->
-</div><!--row-->
+    </div><!--row-->  
+</div><!--map-outer-->
 </div><!--container-->
     
 </body>
