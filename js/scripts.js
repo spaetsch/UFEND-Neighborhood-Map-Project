@@ -103,7 +103,6 @@ var viewModel = {
 var mapView = {
 
   init: function() {
-    var map;
     var mapOptions = {
   //    center: { lat: 47.6374701, lng: -122.3578885}, //Queen Anne Seattle
       center: new google.maps.LatLng(47.6374701,-122.3578885),
@@ -115,19 +114,20 @@ var mapView = {
     map.setOptions({draggableCursor:'url(http://maps.gstatic.com/mapfiles/openhand_8_8.cur),default'}); 
     map.setOptions({draggingCursor:'url(http://maps.gstatic.com/mapfiles/closedhand_8_8.cur),default'}); 
 
-    //current iteration - use geocode with for loop
-    var geocoderCallback = function(marker){
-      return function(results, status) {    
-        model.markers[marker].position = results[0].geometry.location;
-        console.log("model marker category: ", model.markers[marker].category);
-        model.markers[marker].setMap(map);
-      }
+    this.addMarkers();
+  },
+  geocoderCallback: function(marker){
+    return function(results, status) {    
+      model.markers[marker].position = results[0].geometry.location;
+      console.log("model marker category: ", model.markers[marker].category);
+      model.markers[marker].setMap(map);
     }
-
+  },
+  addMarkers: function(){
     //drop markers on map
-    for (marker in model.markers){
+   for (marker in model.markers){
       geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ 'address': model.markers[marker].address }, geocoderCallback(marker));
+      geocoder.geocode({ 'address': model.markers[marker].address }, this.geocoderCallback(marker));
     }
   }
 }
@@ -136,10 +136,7 @@ var mapView = {
 var mapListView = {
   init: function(){
     console.log("I called map list view");
-
   }
-
-
 }
 
 //----
