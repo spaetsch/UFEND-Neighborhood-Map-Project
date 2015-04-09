@@ -1,145 +1,149 @@
 // --------- MODEL ---------------
 
-var model = {
-  markers : {
-    /*houseMarker : new google.maps.Marker({
-      position: new google.maps.LatLng(0,0),
-      title: 'New House',
-      category: "house",
-      address: "1826 12th Ave. W., Seattle, WA" //add address to marker
-    }),*/
-
-    WFMarker : new google.maps.Marker({
-      position: new google.maps.LatLng(0,0),
+var markersModel = [
+    {
       title: 'Whole Foods',
       category: "grocery",
-      icon: "img/pins/supermarket.png",
-      address: "2001 15th Ave. W., Seattle, WA" //add address to marker
-    }),
-
-    TJMarker : new google.maps.Marker({
-      position: new google.maps.LatLng(0,0),
+      address: "2001 15th Ave. W., Seattle, WA", //add address to marker
+      marker : new google.maps.Marker({
+        position: new google.maps.LatLng(0,0),
+        icon: "img/pins/supermarket.png"
+      })
+    },
+    {
       title: "Trader Joe's",
       category: "grocery",
-      icon: "img/pins/supermarket.png",
-      address: "1916 Queen Anne Ave., Seattle, WA" //add address to marker
-    }) ,
-    safewayMarker : new google.maps.Marker({
-      position: new google.maps.LatLng(0,0),
+      address: "1916 Queen Anne Ave., Seattle, WA", //add address to marker
+      marker : new google.maps.Marker({
+        position: new google.maps.LatLng(0,0), 
+        icon: "img/pins/supermarket.png"
+      })
+    },
+    {
       title: "Safeway",
       category: "grocery",
-      icon: "img/pins/supermarket.png",
-      address: "2100 Queen Anne Ave., Seattle, WA" //add address to marker
-    }) ,
-    /*farmerMarker :  new google.maps.Marker({
-      position: new google.maps.LatLng(0,0),
-      title: "Queen Anne Farmer's Market",
-      category: "grocery",
-      address: "7 Crockett St., Seattle, WA" //add address to marker
-    }) ,*/
-    grindMarker : new google.maps.Marker({
-      position: new google.maps.LatLng(0,0),
+      address: "2100 Queen Anne Ave., Seattle, WA", //add address to marker
+      marker : new google.maps.Marker({
+        position: new google.maps.LatLng(0,0),
+        icon: "img/pins/supermarket.png"
+      }) 
+    },
+    {
       title: "The Seattle Grind",
       category: "coffee",
-      icon: "img/pins/coffee.png",
-      address: "1907 10th Ave. W., Seattle, WA" //add address to marker
-    }) ,
-    bustleMarker : new google.maps.Marker({
-      position: new google.maps.LatLng(0,0),
+      address: "1907 10th Ave. W., Seattle, WA", //add address to marker
+      marker : new google.maps.Marker({
+        position: new google.maps.LatLng(0,0),      
+        icon: "img/pins/coffee.png",
+      })
+    },
+    {
       title: "Bustle on Queen Anne",
       category: "coffee",
-      icon: "img/pins/coffee.png",
-      address: "535 W. McGraw St., Seattle, WA" //add address to marker
-    }) ,
-   fiveMarker : new google.maps.Marker({
-      position: new google.maps.LatLng(0,0),
+      address: "535 W. McGraw St., Seattle, WA", //add address to marker
+      marker : new google.maps.Marker({
+        position: new google.maps.LatLng(0,0),
+        icon: "img/pins/coffee.png",
+      }) 
+    },
+    {
       title: "5 Spot",
       category: "restaurant",
-      icon: "img/pins/restaurant.png",
-      address: "1502 Queen Anne Ave N., Seattle, WA" //add address to marker
-    }) ,
-    homegrownMarker : new google.maps.Marker({
-      position: new google.maps.LatLng(0,0),
+      address: "1502 Queen Anne Ave N., Seattle, WA", //add address to marker
+      marker : new google.maps.Marker({
+        position: new google.maps.LatLng(0,0),
+        icon: "img/pins/restaurant.png",
+      }) 
+    },
+    {
       title: "Homegrown",
       category: "restaurant",
-      icon: "img/pins/restaurant.png",
-      address: "2201 Queen Anne Ave N., Seattle, WA" //add address to marker
-    }) ,
-    /*iceboxMarker : new google.maps.Marker({
-      position: new google.maps.LatLng(0,0),
-      title: "Icebox Grocery",
-      category: "restaurant",
-      icon: "img/pins/restaurant.png",
-      address: "1903 10th Ave. W., Seattle, WA" //add address to marker
-    }) */
-
-    howeMarker : new google.maps.Marker({
-      position: new google.maps.LatLng(0,0),
+      address: "2201 Queen Anne Ave N., Seattle, WA", //add address to marker
+      marker : new google.maps.Marker({
+        position: new google.maps.LatLng(0,0),
+        icon: "img/pins/restaurant.png",
+      })
+    },
+    {
       title: "West Howe Park",
       category: "park",
-      icon: "img/pins/park.png",
-      address: "1901 11th Ave. W., Seattle, WA" //add address to marker
-    }) ,
-    kinnearMarker : new google.maps.Marker({
-      position: new google.maps.LatLng(0,0),
+      address: "1901 11th Ave. W., Seattle, WA", //add address to marker
+      marker : new google.maps.Marker({
+        position: new google.maps.LatLng(0,0),
+        icon: "img/pins/park.png",
+      })
+    },
+    {
       title: "Kinnear Park",
       category: "park",
-      icon: "img/pins/park.png",
-      address: "749-827 W. Olympic Pl., Seattle, WA" //add address to marker
-    }) ,
-  } 
-}
+      address: "749-827 W. Olympic Pl., Seattle, WA", //add address to marker
+      marker : new google.maps.Marker({
+        position: new google.maps.LatLng(0,0), 
+        icon: "img/pins/park.png",
+    }) 
+    }
+  ]
+
 
 // ------- VIEWMODEL --------------
 
 
-var viewModel = {
-  init: function(){
-    mapView.init();
-    mapListView.init();
-  }
-}
-  
-var mapView = {
+var currentMarkers = function(members){
 
-  init: function() {
+  var self = this;
+  self.markers = ko.observableArray(members);
+
+}
+
+var mapInit = function(){
+    console.log("I'm in mapInit");
     var mapOptions = {
-  //    center: { lat: 47.6374701, lng: -122.3578885}, //Queen Anne Seattle
-      center: new google.maps.LatLng(47.6374701,-122.3578885),
-      zoom: 14
+      //center: { lat: 47.6374701, lng: -122.3578885}, //Queen Anne Seattle
+      center: new google.maps.LatLng(47.635930, -122.364991),//(47.6374701,-122.3578885),
+      zoom: 15
     };
+
     map = new google.maps.Map(document.getElementById('map-container'), mapOptions);
 
     // fixing bug in google code
     map.setOptions({draggableCursor:'url(http://maps.gstatic.com/mapfiles/openhand_8_8.cur),default'}); 
     map.setOptions({draggingCursor:'url(http://maps.gstatic.com/mapfiles/closedhand_8_8.cur),default'}); 
 
-    this.addMarkers();
-  },
-  geocoderCallback: function(marker){
-    return function(results, status) {    
-      model.markers[marker].position = results[0].geometry.location;
-      console.log("model marker category: ", model.markers[marker].category);
-      model.markers[marker].setMap(map);
+   addAllMarkers();
+  };
+
+var geocoderCallback = function(marker){
+    console.log("I'm in geocoderCallback");
+    return function(results, status) {  
+      console.log("inside");  
+      console.log("markersModel[marker].position", markersModel[marker].position);
+
+      console.log("results[0].geometry.location", results[0].geometry.location);
+      markersModel[marker].marker.position = results[0].geometry.location;
+      markersModel[marker].marker.setMap(map);
     }
-  },
-  addMarkers: function(){
+  };
+
+var addAllMarkers = function(){
     //drop markers on map
-   for (marker in model.markers){
+    console.log("I'm in addAllMarkers");
+   for (marker in markersModel){
+      console.log("marker is: ", markersModel[marker]);
       geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ 'address': model.markers[marker].address }, this.geocoderCallback(marker));
+      geocoder.geocode({ 'address': markersModel[marker].address }, geocoderCallback(marker));
+      console.log("address: ",  markersModel[marker].address);
     }
-  }
-}
+  };
 
 
-var mapListView = {
-  init: function(){
-    console.log("I called map list view");
-  }
-}
 
 //----
-google.maps.event.addDomListener(window, 'load', viewModel.init);
+
+ko.applyBindings(new currentMarkers(markersModel));
+console.log("between bindings and addDomListener");
+google.maps.event.addDomListener(window, 'load', console.log("onload call"));
+google.maps.event.addDomListener(window, 'load', mapInit);
+
+
 
 
