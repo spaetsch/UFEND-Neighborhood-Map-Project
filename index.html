@@ -11,8 +11,9 @@
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD66VY78WBNPsvhYujsJK2uacxLVPfWpRo">
     </script>
-    
-    <script src="js/scripts.js"></script>
+    <script src="js/knockout-3.3.0.js"></script>
+
+
  
    	<link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
@@ -33,7 +34,13 @@
         
         <h4>Results:</h4>
         <div id="map-list"> </div>
-      
+      <div id="map-item"></div>
+
+   <div class="loc-list" data-bind="foreach: markers">
+            <p data-bind="text: title"></p>
+  </div>
+
+
       </div> <!--sidebar-->
 
       <div id="map-container" class="col-md-8"> </div>
@@ -42,6 +49,7 @@
     </div><!--row-->  
 </div><!--map-outer-->
 </div><!--container-->
-    
+        <script src="js/scripts.js"></script>
+
 </body>
 </html>
