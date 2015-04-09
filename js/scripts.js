@@ -89,16 +89,12 @@ var markersModel = [
 
 
 var currentMarkers = function(members){
-
   var self = this;
   self.markers = ko.observableArray(members);
-
 }
 
 var mapInit = function(){
-    console.log("I'm in mapInit");
     var mapOptions = {
-      //center: { lat: 47.6374701, lng: -122.3578885}, //Queen Anne Seattle
       center: new google.maps.LatLng(47.635930, -122.364991),//(47.6374701,-122.3578885),
       zoom: 15
     };
@@ -109,39 +105,41 @@ var mapInit = function(){
     map.setOptions({draggableCursor:'url(http://maps.gstatic.com/mapfiles/openhand_8_8.cur),default'}); 
     map.setOptions({draggingCursor:'url(http://maps.gstatic.com/mapfiles/closedhand_8_8.cur),default'}); 
 
-   addAllMarkers();
+    addAllMarkers();
   };
 
 var geocoderCallback = function(marker){
-    console.log("I'm in geocoderCallback");
     return function(results, status) {  
-      console.log("inside");  
-      console.log("markersModel[marker].position", markersModel[marker].position);
-
-      console.log("results[0].geometry.location", results[0].geometry.location);
       markersModel[marker].marker.position = results[0].geometry.location;
       markersModel[marker].marker.setMap(map);
     }
   };
 
 var addAllMarkers = function(){
-    //drop markers on map
-    console.log("I'm in addAllMarkers");
-   for (marker in markersModel){
-      console.log("marker is: ", markersModel[marker]);
+   for (current in markersModel){
       geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ 'address': markersModel[marker].address }, geocoderCallback(marker));
-      console.log("address: ",  markersModel[marker].address);
+      geocoder.geocode({ 'address': markersModel[current].address }, geocoderCallback(current));
     }
   };
 
 
+var testClick = function(currentMarker){
+  console.log("clicked");
+  console.log(currentMarker.title);
+}
+
+
+var toggleBounce = function(currentMarker) {
+  if (currentMarker.marker.getAnimation() != null) {
+    currentMarker.marker.setAnimation(null);
+  } else {
+    currentMarker.marker.setAnimation(google.maps.Animation.BOUNCE);
+  }
+}
 
 //----
 
 ko.applyBindings(new currentMarkers(markersModel));
-console.log("between bindings and addDomListener");
-google.maps.event.addDomListener(window, 'load', console.log("onload call"));
 google.maps.event.addDomListener(window, 'load', mapInit);
 
 
