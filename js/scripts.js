@@ -92,6 +92,15 @@ var resultMarkers = function(members){
   var self = this;
   self.markers = ko.observableArray(members); 
   self.searchReq = ko.observable("");
+
+  self.filteredMarkers = ko.computed(function() {
+    var debug = $.grep(members, function( a ) {
+      console.log("self.searchReq:", self.searchReq());
+      return a.title.toLowerCase().indexOf(self.searchReq().toLowerCase()) > -1; 
+      });
+    console.log("debug: ", debug);
+    return debug;
+  });
   
   self.geocoderCallback = function(marker){
     return function(results, status) {  
@@ -139,3 +148,4 @@ var myMarkers = new resultMarkers(markersModel);
 ko.applyBindings(myMarkers);
 google.maps.event.addDomListener(window, 'load', myMarkers.mapInit);
 
+//console.log(myMarkers.filteredMarkers);
