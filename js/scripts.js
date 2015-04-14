@@ -110,10 +110,12 @@ var resultMarkers = function(members){
   self.filteredMarkers = ko.computed(function() {
     self.clearMap();
     return $.grep(members, function( a ) {
-      if(a.title.toLowerCase().indexOf(self.searchReq().toLowerCase()) > -1){
+      if(a.title.toLowerCase().indexOf(self.searchReq().toLowerCase()) > -1 ||
+          a.category.toLowerCase().indexOf(self.searchReq().toLowerCase()) > -1){
         a.marker.setMap(map);
       } 
-      return a.title.toLowerCase().indexOf(self.searchReq().toLowerCase()) > -1; 
+      return a.title.toLowerCase().indexOf(self.searchReq().toLowerCase()) > -1 ||
+          a.category.toLowerCase().indexOf(self.searchReq().toLowerCase()) > -1;
       });
   });
   
