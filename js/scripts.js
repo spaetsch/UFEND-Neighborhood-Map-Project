@@ -88,12 +88,30 @@ var markersModel = [
 // ------- VIEWMODEL --------------
 
 
-var currentMarkers = function(members){
+var resultMarkers = function(members){
   var self = this;
-  self.markers = ko.observableArray(members);
-}
+  self.markers = ko.observableArray(members); 
+  self.searchReq = ko.observable("");
+  }
 
-var mapInit = function(){
+
+  self.geocoderCallback = function(marker){
+    return function(results, status) {  
+      markersModel[marker].marker.position = results[0].geometry.location;
+      markersModel[marker].marker.setMap(map);
+    }
+  };
+
+  self.addAllMarkers = function(){  
+    for (current in markersModel){
+        geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'address': markersModel[current].address }, self.geocoderCallback(current));
+      }
+  };
+
+
+  self.mapInit = function(){
+    console.log("mapInit");
     var mapOptions = {
       center: new google.maps.LatLng(47.635930, -122.364991),//(47.6374701,-122.3578885),
       zoom: 15
@@ -105,28 +123,9 @@ var mapInit = function(){
     map.setOptions({draggableCursor:'url(http://maps.gstatic.com/mapfiles/openhand_8_8.cur),default'}); 
     map.setOptions({draggingCursor:'url(http://maps.gstatic.com/mapfiles/closedhand_8_8.cur),default'}); 
 
-    addAllMarkers();
+    self.addAllMarkers();
   };
 
-var geocoderCallback = function(marker){
-    return function(results, status) {  
-      markersModel[marker].marker.position = results[0].geometry.location;
-      markersModel[marker].marker.setMap(map);
-    }
-  };
-
-var addAllMarkers = function(){
-   for (current in markersModel){
-      geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ 'address': markersModel[current].address }, geocoderCallback(current));
-    }
-  };
-
-
-var testClick = function(currentMarker){
-  console.log("clicked");
-  console.log(currentMarker.title);
-}
 
 
 var toggleBounce = function(currentMarker) {
@@ -139,8 +138,11 @@ var toggleBounce = function(currentMarker) {
 
 //----
 
-ko.applyBindings(new currentMarkers(markersModel));
-google.maps.event.addDomListener(window, 'load', mapInit);
+var myMarkers = new resultMarkers(markersModel);
+ko.applyBindings(myMarkers);
+console.log("listening");   
+google.maps.event.addDomListener(window, 'load', myMarkers.mapInit);
+console.log("whats the deal");
 
 
 
