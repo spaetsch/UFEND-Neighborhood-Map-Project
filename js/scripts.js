@@ -84,14 +84,11 @@ var markersModel = [
     }
   ]
 
-
 // ------- VIEWMODEL --------------
 
 
 var resultMarkers = function(members){
   var self = this;
-  self.markers = ko.observableArray(members); 
-  self.searchReq = ko.observable("");
 
   var mapOptions = {
       center: new google.maps.LatLng(47.635930, -122.364991),//(47.6374701,-122.3578885),
@@ -100,25 +97,21 @@ var resultMarkers = function(members){
 
   var map = new google.maps.Map(document.getElementById('map-container'), mapOptions);
 
-self.clearMap = function (map) {
-    for (current in markersModel) {
-      markersModel[current].marker.setMap(null);
-    }
-  }
+  self.markers = ko.observableArray(members); 
+  self.searchReq = ko.observable("");
 
+  self.clearMap = function (map) {
+      for (current in markersModel) {
+        markersModel[current].marker.setMap(null);
+      }
+    }
 
   self.filteredMarkers = ko.computed(function() {
     self.clearMap();
     return $.grep(members, function( a ) {
-      console.log("self.searchReq:", self.searchReq());
-      //drop marker at this location
-      //setMap(map);
-
       if(a.title.toLowerCase().indexOf(self.searchReq().toLowerCase()) > -1){
         a.marker.setMap(map);
       } 
-
-
       return a.title.toLowerCase().indexOf(self.searchReq().toLowerCase()) > -1; 
       });
   });
@@ -137,19 +130,16 @@ self.clearMap = function (map) {
       }
   };
 
-
+/*
   self.mapInit = function(){
   
-
     // fixing bug in google code
     map.setOptions({draggableCursor:'url(http://maps.gstatic.com/mapfiles/openhand_8_8.cur),default'}); 
     map.setOptions({draggingCursor:'url(http://maps.gstatic.com/mapfiles/closedhand_8_8.cur),default'}); 
 
     self.addAllMarkers();
   };
-
-  
-
+*/
 }
 
 var toggleBounce = function(currentMarker) {
@@ -164,6 +154,4 @@ var toggleBounce = function(currentMarker) {
 
 var myMarkers = new resultMarkers(markersModel);
 ko.applyBindings(myMarkers);
-google.maps.event.addDomListener(window, 'load', myMarkers.mapInit);
-
-//console.log(myMarkers.filteredMarkers);
+google.maps.event.addDomListener(window, 'load', myMarkers.addAllMarkers);
