@@ -93,13 +93,34 @@ var resultMarkers = function(members){
   self.markers = ko.observableArray(members); 
   self.searchReq = ko.observable("");
 
+  var mapOptions = {
+      center: new google.maps.LatLng(47.635930, -122.364991),//(47.6374701,-122.3578885),
+      zoom: 15
+    };
+
+  var map = new google.maps.Map(document.getElementById('map-container'), mapOptions);
+
+self.clearMap = function (map) {
+    for (current in markersModel) {
+      markersModel[current].marker.setMap(null);
+    }
+  }
+
+
   self.filteredMarkers = ko.computed(function() {
-    var debug = $.grep(members, function( a ) {
+    self.clearMap();
+    return $.grep(members, function( a ) {
       console.log("self.searchReq:", self.searchReq());
+      //drop marker at this location
+      //setMap(map);
+
+      if(a.title.toLowerCase().indexOf(self.searchReq().toLowerCase()) > -1){
+        a.marker.setMap(map);
+      } 
+
+
       return a.title.toLowerCase().indexOf(self.searchReq().toLowerCase()) > -1; 
       });
-    console.log("debug: ", debug);
-    return debug;
   });
   
   self.geocoderCallback = function(marker){
@@ -118,12 +139,7 @@ var resultMarkers = function(members){
 
 
   self.mapInit = function(){
-    var mapOptions = {
-      center: new google.maps.LatLng(47.635930, -122.364991),//(47.6374701,-122.3578885),
-      zoom: 15
-    };
-
-    map = new google.maps.Map(document.getElementById('map-container'), mapOptions);
+  
 
     // fixing bug in google code
     map.setOptions({draggableCursor:'url(http://maps.gstatic.com/mapfiles/openhand_8_8.cur),default'}); 
@@ -131,6 +147,8 @@ var resultMarkers = function(members){
 
     self.addAllMarkers();
   };
+
+  
 
 }
 
