@@ -101,6 +101,8 @@ var resultMarkers = function(members){
   self.markers = ko.observableArray(members); 
   self.searchReq = ko.observable("");
 
+
+
   self.clearMap = function (map) {
       for (current in markersModel) {
         markersModel[current].marker.setMap(null);
@@ -126,10 +128,28 @@ var resultMarkers = function(members){
     }
   };
 
+
+
   self.addAllMarkers = function(){  
+    
+
     for (current in markersModel){
+
+
+      
+        
+        google.maps.event.addListener(markersModel[current].marker, 'click', function(innerCurrent) {
+          return function(){
+            var infowindow = new google.maps.InfoWindow({
+              content: markersModel[innerCurrent].title
+            });
+            infowindow.open(map, markersModel[innerCurrent].marker);
+          }
+        }(current));
+
         geocoder = new google.maps.Geocoder();
         geocoder.geocode({ 'address': markersModel[current].address }, self.geocoderCallback(current));
+      
       }
   };
 
