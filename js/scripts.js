@@ -84,6 +84,7 @@ var markersModel = [
     }
   ]
 
+
 // ------- VIEWMODEL --------------
 
 
@@ -147,6 +148,8 @@ var toggleBounce = function(currentMarker) {
     currentMarker.marker.setAnimation(null);
   } else {
     currentMarker.marker.setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout(function (){currentMarker.marker.setAnimation(null)}, 2800);
+
   }
 }
 
