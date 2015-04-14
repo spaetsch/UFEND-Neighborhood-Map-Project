@@ -91,8 +91,8 @@ var markersModel = [
 var resultMarkers = function(members){
   var self = this;
   self.markers = ko.observableArray(members); 
-  self.searchReq = ko.observable("");
-  }
+ // self.searchReq = ko.observable("");
+  
 
 
   self.geocoderCallback = function(marker){
@@ -126,7 +126,7 @@ var resultMarkers = function(members){
     self.addAllMarkers();
   };
 
-
+}
 
 var toggleBounce = function(currentMarker) {
   if (currentMarker.marker.getAnimation() != null) {
@@ -140,9 +140,7 @@ var toggleBounce = function(currentMarker) {
 
 var myMarkers = new resultMarkers(markersModel);
 ko.applyBindings(myMarkers);
-console.log("listening");   
 google.maps.event.addDomListener(window, 'load', myMarkers.mapInit);
-console.log("whats the deal");
 
 
 
