@@ -142,12 +142,13 @@ var resultMarkers = function(members){
     }
   }
 
+  //toggle bounce animation on click (data-binding)
   self.toggleBounce = function(currentMarker) {
     if (currentMarker.marker.getAnimation() != null) {
       currentMarker.marker.setAnimation(null);
     } else {
       currentMarker.marker.setAnimation(google.maps.Animation.BOUNCE);
-      setTimeout(function (){currentMarker.marker.setAnimation(null)}, 2800);
+      setTimeout(function (){currentMarker.marker.setAnimation(null)}, 2800); //bounce for 2800 ms
     }
   }
 }
