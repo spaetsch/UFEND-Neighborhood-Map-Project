@@ -107,13 +107,15 @@ var resultMarkers = function(members){
       }
     //place only markers that match search request
     return $.grep(members, function( a ) {
-      if(a.title.toLowerCase().indexOf(self.searchReq().toLowerCase()) > -1 ||
-          a.category.toLowerCase().indexOf(self.searchReq().toLowerCase()) > -1){
-        a.marker.setMap(self.map);
-      } 
-      return a.title.toLowerCase().indexOf(self.searchReq().toLowerCase()) > -1 ||
-          a.category.toLowerCase().indexOf(self.searchReq().toLowerCase()) > -1;
-      });
+    
+      var titleSearch = a.title.toLowerCase().indexOf(self.searchReq().toLowerCase());
+      var catSearch = a.category.toLowerCase().indexOf(self.searchReq().toLowerCase());   
+    
+      if( titleSearch > -1 || catSearch > -1){
+          a.marker.setMap(self.map);
+        } 
+        return titleSearch > -1 || catSearch > -1;
+        });
   });
   
   self.addAllMarkers = function(){  
