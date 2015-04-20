@@ -6,8 +6,8 @@ var markersModel = [
       category: "grocery",                        
       address: "2001 15th Ave. W., Seattle, WA",  // street address for use by geocoder
       marker : new google.maps.Marker({           // google maps marker object
-        position: new google.maps.LatLng(0,0),    // set initial position to (0,0)
-        icon: "img/pins/supermarket.png"          // map icon by category
+        position: new google.maps.LatLng(0,0),      // set initial position to (0,0)
+        icon: "img/pins/supermarket.png"            // map icon by category
       })
     },
     {
@@ -85,38 +85,31 @@ var markersModel = [
   ]
 
 
-// -------------- VIEWMODEL ----------------
+// ---------------------------------- VIEWMODEL ------------------------------
 
 var resultMarkers = function(members){
   var self = this;
 
-  var mapOptions = {
+  self.mapOptions = {
       center: new google.maps.LatLng(47.635930, -122.364991), //set map center in Queen Anne
       zoom: 15
     };
 
-  var map = new google.maps.Map(document.getElementById('map-container'), mapOptions);
+  self.map = new google.maps.Map(document.getElementById('map-container'), self.mapOptions);
 
   self.markers = ko.observableArray(members); 
   self.searchReq = ko.observable("");
 
-  /*self.clearMap = function (map) {
-      for (current in markersModel) {
-        markersModel[current].marker.setMap(null);
-      }
-    }*/
-
   self.filteredMarkers = ko.computed(function() {
-    //self.clearMap();
-
+    //remove all markers from map
     for (current in markersModel) {
         markersModel[current].marker.setMap(null);
       }
-
+    //place only markers that match search request
     return $.grep(members, function( a ) {
       if(a.title.toLowerCase().indexOf(self.searchReq().toLowerCase()) > -1 ||
           a.category.toLowerCase().indexOf(self.searchReq().toLowerCase()) > -1){
-        a.marker.setMap(map);
+        a.marker.setMap(self.map);
       } 
       return a.title.toLowerCase().indexOf(self.searchReq().toLowerCase()) > -1 ||
           a.category.toLowerCase().indexOf(self.searchReq().toLowerCase()) > -1;
@@ -132,7 +125,7 @@ var resultMarkers = function(members){
             var infowindow = new google.maps.InfoWindow({
               content: markersModel[innerCurrent].title
             });
-            infowindow.open(map, markersModel[innerCurrent].marker);
+            infowindow.open(self.map, markersModel[innerCurrent].marker);
           }
         }(current));
 
@@ -141,21 +134,22 @@ var resultMarkers = function(members){
         geocoder.geocode({ 'address': markersModel[current].address }, function(current){
           return function(results, status) {  
             markersModel[current].marker.position = results[0].geometry.location;
-            markersModel[current].marker.setMap(map);
+            markersModel[current].marker.setMap(self.map);
           }
         }(current));
     }
   }
-}
 
-var toggleBounce = function(currentMarker) {
-  if (currentMarker.marker.getAnimation() != null) {
-    currentMarker.marker.setAnimation(null);
-  } else {
-    currentMarker.marker.setAnimation(google.maps.Animation.BOUNCE);
-    setTimeout(function (){currentMarker.marker.setAnimation(null)}, 2800);
+  self.toggleBounce = function(currentMarker) {
+    if (currentMarker.marker.getAnimation() != null) {
+      currentMarker.marker.setAnimation(null);
+    } else {
+      currentMarker.marker.setAnimation(google.maps.Animation.BOUNCE);
+      setTimeout(function (){currentMarker.marker.setAnimation(null)}, 2800);
+    }
   }
 }
+
 
 //----
 
