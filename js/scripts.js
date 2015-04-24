@@ -1,126 +1,127 @@
 // --------- MODEL ---------------
 
 var markersModel = [
-    {
-      title: 'Whole Foods',
-      category: "grocery",                        
-      address: "2001 15th Ave. W., Seattle, WA",  // street address for use by Google Maps geocoder
-      phone:"(206) 352-5440",                     // phone number for use by Yelp API
-      marker : new google.maps.Marker({           // google maps marker object
-        position: new google.maps.LatLng(0,0),      // set initial position to (0,0)
-        icon: "img/pins/supermarket.png"            // map icon by category
-      })
-    },
-    {
-      title: "Trader Joe's",
-      category: "grocery",
-      address: "1916 Queen Anne Ave., Seattle, WA", 
-      phone: "(206) 284-2546",
-      marker : new google.maps.Marker({
-        position: new google.maps.LatLng(0,0), 
-        icon: "img/pins/supermarket.png"
-      })
-    },
-     {
-      title: "Tenth West",
-      category: "restaurant",
-      address: "1903 10th Ave W, Seattle, WA", 
-      phone: "(206) 708-6742",
-      marker : new google.maps.Marker({
-        position: new google.maps.LatLng(0,0), 
-        icon: "img/pins/restaurant.png"
-      })
-    },
-    {
-      title: "Hommage",
-      category: "restaurant",
-      address: "198 Nickerson St, Seattle, WA", 
-      phone: "(206) 283-2665",
-      marker : new google.maps.Marker({
-        position: new google.maps.LatLng(0,0), 
-        icon: "img/pins/restaurant.png"
-      })
-    },/*
-    {
-      title: "Safeway",
-      category: "grocery", 
-      address: "2100 Queen Anne Ave., Seattle, WA", 
-      phone:"(206)282-8090", //wrong
-      marker : new google.maps.Marker({
-        position: new google.maps.LatLng(0,0),
-        icon: "img/pins/supermarket.png"
-      }) 
-    },
-    {
-      title: "The Seattle Grind",
-      category: "coffee",
-      address: "1907 10th Ave. W., Seattle, WA", 
-      phone: "(206) 282-2711",  //wrong
-      marker : new google.maps.Marker({
-        position: new google.maps.LatLng(0,0),      
-        icon: "img/pins/coffee.png",
-      })
-    },*/
-    {
-      title: "Bustle on Queen Anne",
-      category: "coffee",
-      address: "535 W. McGraw St., Seattle, WA", 
-      phone:"(206) 453-4285",
-      marker : new google.maps.Marker({
-        position: new google.maps.LatLng(0,0),
-        icon: "img/pins/coffee.png",
-      }) 
-    },
-    {
-      title: "Storyville Coffee Company",
-      category: "coffee",
-      address: "2128 Queen Anne Ave N, Seattle, WA", 
-      phone:"(206) 780-5777",
-      marker : new google.maps.Marker({
-        position: new google.maps.LatLng(0,0),
-        icon: "img/pins/coffee.png",
-      }) 
-    },
-    {
-      title: "5 Spot",
-      category: "restaurant",
-      address: "1502 Queen Anne Ave N., Seattle, WA", 
-      phone:"(206) 285-7768",
-      marker : new google.maps.Marker({
-        position: new google.maps.LatLng(0,0),
-        icon: "img/pins/restaurant.png",
-      }) 
-    },
-    {
-      title: "Homegrown",
-      category: "restaurant",
-      address: "2201 Queen Anne Ave N., Seattle, WA", 
-      phone: "(206) 217-4745",
-      marker : new google.maps.Marker({
-        position: new google.maps.LatLng(0,0),
-        icon: "img/pins/restaurant.png",
-      })
-    },/*
-    {
-      title: "West Howe Park",
-      category: "park",
-      address: "1901 11th Ave. W., Seattle, WA", 
-      marker : new google.maps.Marker({
-        position: new google.maps.LatLng(0,0),
-        icon: "img/pins/park.png",
-      })
-    },
-    {
-      title: "Kinnear Park",
-      category: "park",
-      address: "749-827 W. Olympic Pl., Seattle, WA", 
-      phone:"(206) 684-4075",
-      marker : new google.maps.Marker({
-        position: new google.maps.LatLng(0,0), 
-        icon: "img/pins/park.png",
+  {
+    title: "5 Spot",
+    category: "restaurant",
+    address: "1502 Queen Anne Ave N., Seattle, WA", 
+    phone:"(206) 285-7768",
+    marker : new google.maps.Marker({
+      position: new google.maps.LatLng(0,0),
+      icon: "img/pins/restaurant.png",
     }) 
-    }*/
-  ]
+  },
+  {
+    title: "Bustle on Queen Anne",
+    category: "coffee",
+    address: "535 W. McGraw St., Seattle, WA", 
+    phone:"(206) 453-4285",
+    marker : new google.maps.Marker({
+      position: new google.maps.LatLng(0,0),
+      icon: "img/pins/coffee.png",
+    }) 
+  },
+   {
+    title: "Cafe Ladro",
+    category: "coffee",
+    address: "2205 Queen Anne Ave N, Seattle, WA", 
+    phone:"(206) 282-5313",
+    marker : new google.maps.Marker({
+      position: new google.maps.LatLng(0,0),
+      icon: "img/pins/coffee.png",
+    }) 
+  },
+  {
+    title: "Homegrown",
+    category: "restaurant",
+    address: "2201 Queen Anne Ave N., Seattle, WA", 
+    phone: "(206) 217-4745",
+    marker : new google.maps.Marker({
+      position: new google.maps.LatLng(0,0),
+      icon: "img/pins/restaurant.png",
+    })
+  },
+  {
+    title: "Hommage",
+    category: "restaurant",
+    address: "198 Nickerson St, Seattle, WA", 
+    phone: "(206) 283-2665",
+    marker : new google.maps.Marker({
+      position: new google.maps.LatLng(0,0), 
+      icon: "img/pins/restaurant.png"
+    })
+  },
+  {
+    title: "Nickerson Street Saloon",
+    category: "pub",
+    address: "318 Nickerson St, Seattle, WA", 
+    phone: "(206) 284-8819",
+    marker : new google.maps.Marker({
+      position: new google.maps.LatLng(0,0),
+      icon: "img/pins/bar.png",
+    })
+  },
+  {
+    title: "Paragon Seattle",
+    category: "pub",
+    address: "2125 Queen Anne Ave N, Seattle, WA", 
+    phone: "(206) 283-4548",
+    marker : new google.maps.Marker({
+      position: new google.maps.LatLng(0,0),
+      icon: "img/pins/bar.png",
+    })
+  },
+  {
+    title: "Storyville Coffee Company",
+    category: "coffee",
+    address: "2128 Queen Anne Ave N, Seattle, WA", 
+    phone:"(206) 780-5777",
+    marker : new google.maps.Marker({
+      position: new google.maps.LatLng(0,0),
+      icon: "img/pins/coffee.png",
+    }) 
+  },
+  {
+    title: "Sully's Lounge",
+    category: "pub",
+    address: "1625 Queen Anne Ave N, Seattle, WA", 
+    phone: "(206) 283-3900",
+    marker : new google.maps.Marker({
+      position: new google.maps.LatLng(0,0),
+      icon: "img/pins/bar.png",
+    })
+  },
+  {
+    title: "Tenth West",
+    category: "restaurant",
+    address: "1903 10th Ave W, Seattle, WA", 
+    phone: "(206) 708-6742",
+    marker : new google.maps.Marker({
+      position: new google.maps.LatLng(0,0), 
+      icon: "img/pins/restaurant.png"
+    })
+  },
+     {
+    title: "Trader Joe's",
+    category: "grocery",
+    address: "1916 Queen Anne Ave., Seattle, WA", 
+    phone: "(206) 284-2546",
+    marker : new google.maps.Marker({
+      position: new google.maps.LatLng(0,0), 
+      icon: "img/pins/supermarket.png"
+    })
+  },
+  {
+    title: 'Whole Foods',
+    category: "grocery",                        
+    address: "2001 15th Ave. W., Seattle, WA",  // street address for use by Google Maps geocoder
+    phone:"(206) 352-5440",                     // phone number for use by Yelp API
+    marker : new google.maps.Marker({           // google maps marker object
+      position: new google.maps.LatLng(0,0),      // set initial position to (0,0)
+      icon: "img/pins/supermarket.png"            // map icon by category
+    })
+  },
+]
 
 
 // ---------------------------------- VIEWMODEL ------------------------------
@@ -129,8 +130,8 @@ var resultMarkers = function(members){
   var self = this;
 
   self.mapOptions = {
-      center: new google.maps.LatLng(47.635930, -122.364991), //set map center in Queen Anne
-      zoom: 14
+      center: new google.maps.LatLng(47.641437, -122.360834),//(47.635930, -122.364991), //set map center in Queen Anne
+      zoom: 15
     };
 
   self.map = new google.maps.Map(document.getElementById('map-container'), self.mapOptions);
