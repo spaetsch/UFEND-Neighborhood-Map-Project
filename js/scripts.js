@@ -163,14 +163,19 @@ var resultMarkers = function(members){
         //add event listener to each map marker to trigger the corresponding infowindow on click
         google.maps.event.addListener(markersModel[current].marker, 'click', function(innerCurrent) {
           return function(){
-
             var infowindow = new google.maps.InfoWindow({
-              content: ""
+              content: "<div id='yelpWindow'></div>" ,
+              maxWidth: 250
             });
 
             yelpRequest(markersModel[innerCurrent].phone, function(data){
-              var contentString = "<h5>" + data.name + "</h5>" + 
-                  "<img src='" + data.rating_img_url_large + "'>";
+              var contentString = "<div id='yelpWindow'>" +
+                                  "<h5>" +  "<a href='" + data.mobile_url + "' target='_blank'>" +data.name + "</a>" + "</h5>" + 
+                                  "<p>" + data.location.address + "</p>" +
+                                  "<p>" + data.display_phone + "</p>" +
+                                  "<img src='" + data.rating_img_url_large + "'>" +
+                                  "<p>" + data.snippet_text + "</p>" +
+                                  "</div>";
               infowindow.setContent(contentString);
             });
             infowindow.open(self.map, markersModel[innerCurrent].marker);
@@ -186,7 +191,7 @@ var resultMarkers = function(members){
           }
         }(current));
     }//for loop
-  }
+  }//addAllMarkers
 
   //toggle bounce animation on click (data-binding)
   self.toggleBounce = function(currentMarker) {
@@ -198,6 +203,8 @@ var resultMarkers = function(members){
     }
   }
 }
+
+//----
 
 //----
 

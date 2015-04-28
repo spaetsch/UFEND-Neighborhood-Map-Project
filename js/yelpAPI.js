@@ -37,63 +37,21 @@ var yelpRequest = function(phoneNumber, callback){
 
   var parameterMap = OAuth.getParameterMap(myMessage.parameters);
   parameterMap.oauth_signature = OAuth.percentEncode(parameterMap.oauth_signature)
-  //console.log(parameterMap);
 
   $.ajax({
     'url': myMessage.action,
     'data': parameterMap,
     'cache': true,
     'dataType': 'jsonp',
-   // 'jsonpCallback': 'cb',
-    'success': function(data, textStats, XMLHttpRequest) {
-      //set local variables to info from ajax request
-    //  var resultTitle = data.businesses[0].name;
-    //  var resultStars = data.businesses[0].rating_img_url_large;
-    //  var resultSnippet = data.businesses[0].snippet_text;
-    //  var resultDisPhone = data.businesses[0].display_phone;
-    //  var resultLocation = data.businesses[0].location;
-    //  var resultDisAddress = data.businesses[0].location.address[0];
-    //  var resultCategory  = data.businesses[0].categories;
-    //  var stars = "<img src='"+resultStars+"'>";
-
-      //debugging 
-    //  console.log(data);
-      //console.log("resultTitle= ", resultTitle);
-      //console.log("snippet= ", resultSnippet);
-      //console.log("phone= ", resultDisPhone);
-      //console.log("rating URL= ", resultStars);
-      //console.log("location ", resultLocation);
-      //console.log("address ", resultDisAddress);
-      //console.log("categories ", resultCategory);
-
-      //add to display
-    //  $("#yelp-title").append(resultTitle);
-      //$("#yelp-phone").append(resultDisPhone);
-      //$("#yelp-snippet").append(resultSnippet);
-      //$("#yelp-address").append(resultDisAddress);
-      //$("#yelp-rating").append(stars);
-
-      console.log("in yelpAPI.js: data.businesses[0]=", data.businesses[0]);
-    
+    'success': function(data, textStats, XMLHttpRequest) {    
       callback(data.businesses[0]);
-
     }
+  }).error(function(e){
+    $('#yelpWindow').text("Error: Yelp data could not be loaded");
   });
   
 
 }
 
-/*
-<body>
-<p>Yelp Test</p>
-<div class="yelp-container">
-<h2 id="yelp-title"></h3>
-<p id="yelp-category"></p>
-<div id="yelp-rating"></div>
-<p id="yelp-phone"></p>
-<p id="yelp-address"><p>
-<p id="yelp-snippet"></p>
 
-  </div>
-*/
 
