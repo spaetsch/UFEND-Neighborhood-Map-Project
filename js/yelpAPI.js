@@ -46,11 +46,9 @@ var yelpRequest = function(phoneNumber, callback){
     'success': function(data, textStats, XMLHttpRequest) {    
       callback(data.businesses[0]);
     }
-  }).error(function(e){
+  }).fail(function(e){
     $('#yelpWindow').text("Error: Yelp data could not be loaded");
   });
-  
-
 }
 
 

@@ -1,5 +1,11 @@
 // --------- MODEL ---------------
 
+  if(!window.google || !window.google.maps){
+        $('#map-container').text("Error: Google Maps data could not be loaded");
+        $('#map-list').text("Error: Google Maps data could not be loaded");
+
+    }
+ 
 var markersModel = [
   {
     title: "5 Spot",
@@ -123,7 +129,6 @@ var markersModel = [
   },
 ]
 
-
 // ---------------------------------- VIEWMODEL ------------------------------
 
 var resultMarkers = function(members){
@@ -203,8 +208,6 @@ var resultMarkers = function(members){
     }
   }
 }
-
-//----
 
 //----
 
