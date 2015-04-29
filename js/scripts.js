@@ -236,6 +236,45 @@ var resultMarkers = function(members){
     }//--for loop
   }//--addAllMarkers
 
+/*
+
+// delay between geocode requests - at the time of writing, 100 miliseconds seems to work well
+    var delay = 100;
+
+// ====== Geocoding ======
+      function getAddress(search, next) {
+        geo.geocode({address:search}, function (results,status)
+          { 
+            // If that was successful
+            if (status == google.maps.GeocoderStatus.OK) {
+              // Lets assume that the first marker is the one we want
+              var p = results[0].geometry.location;
+              var lat=p.lat();
+              var lng=p.lng();
+              // Output the data
+                var msg = 'address="' + search + '" lat=' +lat+ ' lng=' +lng+ '(delay='+delay+'ms)<br>';
+                document.getElementById("messages").innerHTML += msg;
+              // Create a marker
+              createMarker(search,lat,lng);
+            }
+            // ====== Decode the error status ======
+            else {
+              // === if we were sending the requests to fast, try this one again and increase the delay
+              if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+                nextAddress--;
+                delay++;
+              } else {
+                var reason="Code "+status;
+                var msg = 'address="' + search + '" error=' +reason+ '(delay='+delay+'ms)<br>';
+                document.getElementById("messages").innerHTML += msg;
+              }   
+            }
+            next();
+          }
+        );
+      }
+
+*/
 
  
 
@@ -250,6 +289,26 @@ var resultMarkers = function(members){
     }
   }
 }
+
+/*
+// ======= Global variable to remind us what to do next
+      var nextAddress = 0;
+
+      // ======= Function to call the next Geocode operation when the reply comes back
+
+      function theNext() {
+        if (nextAddress < addresses.length) {
+          setTimeout('getAddress("'+addresses[nextAddress]+'",theNext)', delay);
+          nextAddress++;
+        } else {
+          // We're done. Show map bounds
+          map.fitBounds(bounds);
+        }
+      }
+
+      // ======= Call that function for the first time =======
+      theNext();
+*/
 
 //----
 
