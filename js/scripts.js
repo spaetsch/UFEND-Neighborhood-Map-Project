@@ -219,29 +219,18 @@ var resultMarkers = function(members){
         geocoder.geocode({ 'address': markersModel[current].address }, function(current){
           return function(results, status) { 
             if (status === "OK"){
-              console.log("in status OK: ", markersModel[current].title, "is", status);
               markersModel[current].marker.position = results[0].geometry.location;
               markersModel[current].marker.setMap(self.map);
             } else if(status === "OVER_QUERY_LIMIT"){
               //timeout re-request
-              console.log("in status OVERLIMIT: ", markersModel[current].title, "is", status);
-
               setTimeout(function(){
-                console.log("inside setTimeout");
-                console.log("current is", current);
-                console.log("markersModel[current].address ", markersModel[current].address );
-
-
-
                 geocoder.geocode({ 'address': markersModel[current].address }, function(current){
                   return function(results, status) { 
-                    console.log("inner status is", status);
-                    console.log("inside OVERLIMIT geocoder callback");
-                    console.log(results);
+                    console.log("inside OVERLIMIT geocoder callback, status is", status);
+                    console.log("markersModel[current].title", markersModel[current].title);
                     markersModel[current].marker.position = results[0].geometry.location;
                     markersModel[current].marker.setMap(self.map);
-                  }
-            
+                  }  
                 }(current));
               }, 2000); //--setTimeout
               
