@@ -43,7 +43,7 @@ var markersModel = [
    {
     title: "BAD ADDRESS DATA ",
     category: "restaurant",
-    address: "plergh", // street address for use by Google Maps geocoder
+    address: "plergh",                        // street address for use by Google Maps geocoder
     phone:"(206) 285-7768",  
     status: ko.observable("OK"),                       // phone number for use by Yelp API
     marker : new google.maps.Marker({               // google maps marker object
@@ -218,15 +218,36 @@ var resultMarkers = function(members){
         //place marker on map using address to find LatLng with geocoder
         geocoder.geocode({ 'address': markersModel[current].address }, function(current){
           return function(results, status) { 
-            if (status === "OK" || status === "OVER_QUERY_LIMIT"){
-              console.log("in IF OK: ", markersModel[current].title, "is", status);
+            if (status === "OK"){
+              console.log("in status OK: ", markersModel[current].title, "is", status);
               markersModel[current].marker.position = results[0].geometry.location;
               markersModel[current].marker.setMap(self.map);
-            } 
-            else{
-              console.log("in geocode else, markersModel[current].title is", markersModel[current].title);
-              console.log("status is",status)
+            } else if(status === "OVER_QUERY_LIMIT"){
+              //timeout re-request
+              console.log("in status OVERLIMIT: ", markersModel[current].title, "is", status);
 
+              setTimeout(function(){
+                console.log("inside setTimeout");
+                console.log("current is", current);
+                console.log("markersModel[current].address ", markersModel[current].address );
+
+
+
+                geocoder.geocode({ 'address': markersModel[current].address }, function(current){
+                  return function(results, status) { 
+                    console.log("inner status is", status);
+                    console.log("inside OVERLIMIT geocoder callback");
+                    console.log(results);
+                    markersModel[current].marker.position = results[0].geometry.location;
+                    markersModel[current].marker.setMap(self.map);
+                  }
+            
+                }(current));
+              }, 2000); //--setTimeout
+              
+            } else {
+              console.log("in status ERROR ", markersModel[current].title, "is", status); 
+              //DISPLAY ERROR ON SCREEN
               markersModel[current].status("ERROR");
 
             }
@@ -292,7 +313,7 @@ var resultMarkers = function(members){
 
 /*
 // ======= Global variable to remind us what to do next
-      var nextAddress = 0;
+      var nextAddress = 0; // add to data model?
 
       // ======= Function to call the next Geocode operation when the reply comes back
 
@@ -304,6 +325,16 @@ var resultMarkers = function(members){
           // We're done. Show map bounds
           map.fitBounds(bounds);
         }
+      }
+
+      function getNextAddress() {
+        if (nextAddress < addresses.length) {
+          setTimeout('getAddress("'+addresses[nextAddress]+'",getNextAddress)', delay);
+          nextAddress++;
+        } //else {
+          // We're done. Show map bounds
+          //map.fitBounds(bounds);
+        //}
       }
 
       // ======= Call that function for the first time =======
