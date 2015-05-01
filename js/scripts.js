@@ -165,57 +165,48 @@ var resultMarkers = function(members){
 
   self.map = new google.maps.Map(document.getElementById('map-container'), self.mapOptions);
 
-  self.markers = ko.observableArray(members); 
   self.searchReq = ko.observable("");
 
   self.filteredMarkers = ko.computed(function() {
     //remove all markers from map
-    for (current in markersModel) {
-        markersModel[current].marker.setMap(null);
+    for (current in members) {
+        members[current].marker.setMap(null);
     }
-    
     //place only the markers that match search request
     var arrayResults = [];
-      arrayResults =     $.grep(members, function( a ) {  
+    arrayResults =  $.grep(members, function(a) {  
       var titleSearch = a.title.toLowerCase().indexOf(self.searchReq().toLowerCase());
       var catSearch = a.category.toLowerCase().indexOf(self.searchReq().toLowerCase());   
-      //if(titleSearch > -1 || catSearch > -1){     
-         // a.marker.setMap(self.map);
-        //} 
-        return ((titleSearch > -1 || catSearch > -1) && a.status() === "OK")  
+      return ((titleSearch > -1 || catSearch > -1) && a.status() === "OK")  
     });
-
+    //iterate thru results, set animation timeout for each
     for (item in arrayResults){
       (function f(){
         var current = item;
-        setTimeout (function(){(arrayResults[current].marker.setMap(self.map))}, current * 1000);
+        setTimeout (function(){(arrayResults[current].marker.setMap(self.map))}, current * 750);
       }());
     }
-
+    //return results
     return arrayResults;
   });
   
   self.setPosition = function(location){
         geocoder = new google.maps.Geocoder();
         //use address to find LatLng with geocoder
-        geocoder.geocode({ 'address': location.address }, function(current){
+        geocoder.geocode({ 'address': location.address }, function(){
           return function(results, status) { 
             if (status === "OK"){
               location.marker.position = results[0].geometry.location;
               location.marker.setAnimation(google.maps.Animation.DROP);
-             // location.marker.setMap(self.map);
-
             } else if (status === "OVER_QUERY_LIMIT"){
               //timeout re-request
               setTimeout(function(){
-                geocoder.geocode({ 'address': location.address }, function(current){
+                geocoder.geocode({ 'address': location.address }, function(){
                   return function(results, status) { 
-                    console.log("inside OVERLIMIT geocoder callback, status is", status);
-                    console.log("location.title", location.title);
                     location.marker.position = results[0].geometry.location;
                     location.marker.setMap(self.map);
                   }  
-                }(current));
+                }());
               }, 3000); //--setTimeout
               
             } else {
@@ -227,7 +218,7 @@ var resultMarkers = function(members){
         }(current));
     }//--setPosition
   
-  self.addMarker = function(location){     
+  self.setBubble = function(location){     
         //add event listener to each map marker to trigger the corresponding infowindow on click
         google.maps.event.addListener(location.marker, 'click', function(innerCurrent) {
           return function(){
@@ -237,6 +228,7 @@ var resultMarkers = function(members){
             });
 
             yelpRequest(markersModel[innerCurrent].phone, function(data){
+              console.log("wtf is innerCurrent:", innerCurrent);
               var contentString = "<div id='yelpWindow'>" +
                                   "<h5>" +  "<a href='" + data.mobile_url + "' target='_blank'>" +data.name + "</a>" + "</h5>" + 
                                   "<p>" + data.location.address + "</p>" +
@@ -252,8 +244,9 @@ var resultMarkers = function(members){
   }
 
   self.initialize = function(){
-    for (current in markersModel){    
-      self.setPosition(markersModel[current]);
+    for (current in members){    
+      self.setPosition(members[current]);
+      self.setBubble(members[current]);
     } 
   }
 
@@ -263,7 +256,7 @@ var resultMarkers = function(members){
       currentMarker.marker.setAnimation(null);
     } else {
       currentMarker.marker.setAnimation(google.maps.Animation.BOUNCE);
-      setTimeout(function (){currentMarker.marker.setAnimation(null)}, 2800); //bounce for 2800 ms
+      setTimeout(function(){currentMarker.marker.setAnimation(null)}, 2800); //bounce for 2800 ms
     }
   }
 }
