@@ -26,18 +26,18 @@
 <div class="container">
   <div id="map-outer" class="col-md-12">    
     <div class="row">
-      <div id="sidebar" class="col-md-4">
-        <h2>Queen Anne Neighborhood Map</h2>
+      <div id="sidebar" class="col-md-3">
+        <h3>Queen Anne Neighborhood Map</h3>
         <div id="searchbox">
           Search: <input data-bind="textInput: searchReq"><br>
         </div>      
-        <h4>Results:</h4>
+        <h4>Locations:</h4>
         <div class="loc-list" data-bind="foreach: filteredMarkers">
           <button data-bind="text: title, click: myMarkers.toggleBounce"></button><br>
         </div>
       </div> <!--sidebar-->
 
-      <div id="map-container" class="col-md-8"> </div>
+      <div id="map-container" class="col-md-9"> </div>
     
     </div><!--row-->  
 </div><!--map-outer-->

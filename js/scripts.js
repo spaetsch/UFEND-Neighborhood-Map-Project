@@ -153,8 +153,6 @@ var markersModel = [
 
 // ---------------------------------- VIEWMODEL ------------------------------
 
-var markerIterator;
-
 var resultMarkers = function(members){
   var self = this;
 
@@ -182,53 +180,45 @@ var resultMarkers = function(members){
     //iterate thru results, set animation timeout for each
     for (item in arrayResults){
       (function f(){
-        var current = item;
-        setTimeout (function(){(arrayResults[current].marker.setMap(self.map))}, current * 750);
+        var i = item;
+        setTimeout(function(){(arrayResults[i].marker.setMap(self.map))}, i * 300);
       }());
     }
-    //return results
     return arrayResults;
   });
   
   self.setPosition = function(location){
-        geocoder = new google.maps.Geocoder();
-        //use address to find LatLng with geocoder
-        geocoder.geocode({ 'address': location.address }, function(){
-          return function(results, status) { 
-            if (status === "OK"){
+    geocoder = new google.maps.Geocoder();
+    //use address to find LatLng with geocoder
+    geocoder.geocode({ 'address': location.address }, function(results, status) { 
+      if (status === "OK"){
+        location.marker.position = results[0].geometry.location;
+        location.marker.setAnimation(google.maps.Animation.DROP);
+      } else if (status === "OVER_QUERY_LIMIT"){
+        //timeout re-request
+        setTimeout(function(){
+          geocoder.geocode({ 'address': location.address }, function(results, status) { 
               location.marker.position = results[0].geometry.location;
-              location.marker.setAnimation(google.maps.Animation.DROP);
-            } else if (status === "OVER_QUERY_LIMIT"){
-              //timeout re-request
-              setTimeout(function(){
-                geocoder.geocode({ 'address': location.address }, function(){
-                  return function(results, status) { 
-                    location.marker.position = results[0].geometry.location;
-                    location.marker.setMap(self.map);
-                  }  
-                }());
-              }, 3000); //--setTimeout
-              
-            } else {
-              console.log("in status ERROR ", location.title, "is", status); 
-              //DISPLAY ERROR ON SCREEN
-              location.status("ERROR");
-            }  
-          }
-        }(current));
-    }//--setPosition
+            }  );
+        }, 3000); //--setTimeout
+      } else {
+        console.log("in status ERROR ", location.title, "is", status); 
+        //DISPLAY ERROR ON SCREEN
+        location.status("ERROR");
+      }  
+    });
+  }//--setPosition
   
-  self.setBubble = function(location){     
+  self.setBubble = function(index){    
         //add event listener to each map marker to trigger the corresponding infowindow on click
-        google.maps.event.addListener(location.marker, 'click', function(innerCurrent) {
-          return function(){
+        google.maps.event.addListener(members[index].marker, 'click', function() {
             var infowindow = new google.maps.InfoWindow({
               content: "<div id='yelpWindow'></div>" ,
               maxWidth: 250
             });
 
-            yelpRequest(markersModel[innerCurrent].phone, function(data){
-              console.log("wtf is innerCurrent:", innerCurrent);
+            yelpRequest(members[index].phone, function(data){
+              console.log("wtf is index:", index);
               var contentString = "<div id='yelpWindow'>" +
                                   "<h5>" +  "<a href='" + data.mobile_url + "' target='_blank'>" +data.name + "</a>" + "</h5>" + 
                                   "<p>" + data.location.address + "</p>" +
@@ -238,15 +228,14 @@ var resultMarkers = function(members){
                                   "</div>";
               infowindow.setContent(contentString);
             });
-            infowindow.open(self.map, location.marker);
-          }
-        }(current));
+            infowindow.open(self.map, members[index].marker);
+          });
   }
 
   self.initialize = function(){
     for (current in members){    
       self.setPosition(members[current]);
-      self.setBubble(members[current]);
+      self.setBubble(current);
     } 
   }
 
