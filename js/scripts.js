@@ -6,7 +6,6 @@ if(!window.google || !window.google.maps){
 // --------- MODEL ---------------
  
 var markersModel = [
-
   {
     title: "5 Spot",
     category: "restaurant",
@@ -15,7 +14,7 @@ var markersModel = [
     status: ko.observable("OK"),
     marker : new google.maps.Marker({               // google maps marker object
       position: new google.maps.LatLng(0,0),          // set initial position to (0,0)
-      icon: "img/pins/restaurant.png"                 // map icon by category
+      icon: "img/pins/restaurant.png",
     }) 
   },
   {
@@ -26,7 +25,7 @@ var markersModel = [
     status: ko.observable("OK"),
     marker : new google.maps.Marker({
       position: new google.maps.LatLng(0,0),
-      icon: "img/pins/coffee.png"
+      icon: "img/pins/coffee.png",
     }) 
   },
    {
@@ -37,18 +36,18 @@ var markersModel = [
     status: ko.observable("OK"),
     marker : new google.maps.Marker({
       position: new google.maps.LatLng(0,0),
-      icon: "img/pins/coffee.png"
+      icon: "img/pins/coffee.png",
     }) 
   },
    {
     title: "BAD ADDRESS DATA ",
     category: "restaurant",
-    address: "plergh",                        // street address for use by Google Maps geocoder
+    address: "plergh",                        // bad data for testing
     phone:"(206) 285-7768",  
-    status: ko.observable("OK"),                       // phone number for use by Yelp API
-    marker : new google.maps.Marker({               // google maps marker object
-      position: new google.maps.LatLng(0,0),          // set initial position to (0,0)
-      icon: "img/pins/restaurant.png"                 // map icon by category
+    status: ko.observable("OK"),                       
+    marker : new google.maps.Marker({               
+      position: new google.maps.LatLng(0,0),          
+      icon: "img/pins/restaurant.png"                 
     }) 
   },
   {
@@ -154,6 +153,8 @@ var markersModel = [
 
 // ---------------------------------- VIEWMODEL ------------------------------
 
+var markerIterator;
+
 var resultMarkers = function(members){
   var self = this;
 
@@ -173,27 +174,62 @@ var resultMarkers = function(members){
         markersModel[current].marker.setMap(null);
     }
     
-
-
     //place only the markers that match search request
-    return $.grep(members, function( a ) { 
-   
+    var arrayResults = [];
+      arrayResults =     $.grep(members, function( a ) {  
       var titleSearch = a.title.toLowerCase().indexOf(self.searchReq().toLowerCase());
       var catSearch = a.category.toLowerCase().indexOf(self.searchReq().toLowerCase());   
-      if(titleSearch > -1 || catSearch > -1){
-          a.marker.setMap(self.map);
-        } 
+      //if(titleSearch > -1 || catSearch > -1){     
+         // a.marker.setMap(self.map);
+        //} 
         return ((titleSearch > -1 || catSearch > -1) && a.status() === "OK")  
-  
     });
 
+    for (item in arrayResults){
+      (function f(){
+        var current = item;
+        setTimeout (function(){(arrayResults[current].marker.setMap(self.map))}, current * 1000);
+      }());
+    }
+
+    return arrayResults;
   });
   
-  self.addAllMarkers = function(){  
-    //iterate through all markers in the model
-    for (current in markersModel){
+  self.setPosition = function(location){
+        geocoder = new google.maps.Geocoder();
+        //use address to find LatLng with geocoder
+        geocoder.geocode({ 'address': location.address }, function(current){
+          return function(results, status) { 
+            if (status === "OK"){
+              location.marker.position = results[0].geometry.location;
+              location.marker.setAnimation(google.maps.Animation.DROP);
+             // location.marker.setMap(self.map);
+
+            } else if (status === "OVER_QUERY_LIMIT"){
+              //timeout re-request
+              setTimeout(function(){
+                geocoder.geocode({ 'address': location.address }, function(current){
+                  return function(results, status) { 
+                    console.log("inside OVERLIMIT geocoder callback, status is", status);
+                    console.log("location.title", location.title);
+                    location.marker.position = results[0].geometry.location;
+                    location.marker.setMap(self.map);
+                  }  
+                }(current));
+              }, 3000); //--setTimeout
+              
+            } else {
+              console.log("in status ERROR ", location.title, "is", status); 
+              //DISPLAY ERROR ON SCREEN
+              location.status("ERROR");
+            }  
+          }
+        }(current));
+    }//--setPosition
+  
+  self.addMarker = function(location){     
         //add event listener to each map marker to trigger the corresponding infowindow on click
-        google.maps.event.addListener(markersModel[current].marker, 'click', function(innerCurrent) {
+        google.maps.event.addListener(location.marker, 'click', function(innerCurrent) {
           return function(){
             var infowindow = new google.maps.InfoWindow({
               content: "<div id='yelpWindow'></div>" ,
@@ -210,84 +246,16 @@ var resultMarkers = function(members){
                                   "</div>";
               infowindow.setContent(contentString);
             });
-            infowindow.open(self.map, markersModel[innerCurrent].marker);
+            infowindow.open(self.map, location.marker);
           }
         }(current));
+  }
 
-        geocoder = new google.maps.Geocoder();
-        //place marker on map using address to find LatLng with geocoder
-        geocoder.geocode({ 'address': markersModel[current].address }, function(current){
-          return function(results, status) { 
-            if (status === "OK"){
-              markersModel[current].marker.position = results[0].geometry.location;
-              markersModel[current].marker.setMap(self.map);
-            } else if(status === "OVER_QUERY_LIMIT"){
-              //timeout re-request
-              setTimeout(function(){
-                geocoder.geocode({ 'address': markersModel[current].address }, function(current){
-                  return function(results, status) { 
-                    console.log("inside OVERLIMIT geocoder callback, status is", status);
-                    console.log("markersModel[current].title", markersModel[current].title);
-                    markersModel[current].marker.position = results[0].geometry.location;
-                    markersModel[current].marker.setMap(self.map);
-                  }  
-                }(current));
-              }, 2000); //--setTimeout
-              
-            } else {
-              console.log("in status ERROR ", markersModel[current].title, "is", status); 
-              //DISPLAY ERROR ON SCREEN
-              markersModel[current].status("ERROR");
-
-            }
-           
-          }
-        }(current));
-    }//--for loop
-  }//--addAllMarkers
-
-/*
-
-// delay between geocode requests - at the time of writing, 100 miliseconds seems to work well
-    var delay = 100;
-
-// ====== Geocoding ======
-      function getAddress(search, next) {
-        geo.geocode({address:search}, function (results,status)
-          { 
-            // If that was successful
-            if (status == google.maps.GeocoderStatus.OK) {
-              // Lets assume that the first marker is the one we want
-              var p = results[0].geometry.location;
-              var lat=p.lat();
-              var lng=p.lng();
-              // Output the data
-                var msg = 'address="' + search + '" lat=' +lat+ ' lng=' +lng+ '(delay='+delay+'ms)<br>';
-                document.getElementById("messages").innerHTML += msg;
-              // Create a marker
-              createMarker(search,lat,lng);
-            }
-            // ====== Decode the error status ======
-            else {
-              // === if we were sending the requests to fast, try this one again and increase the delay
-              if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
-                nextAddress--;
-                delay++;
-              } else {
-                var reason="Code "+status;
-                var msg = 'address="' + search + '" error=' +reason+ '(delay='+delay+'ms)<br>';
-                document.getElementById("messages").innerHTML += msg;
-              }   
-            }
-            next();
-          }
-        );
-      }
-
-*/
-
- 
-
+  self.initialize = function(){
+    for (current in markersModel){    
+      self.setPosition(markersModel[current]);
+    } 
+  }
 
   //toggle bounce animation on click (data-binding)
   self.toggleBounce = function(currentMarker) {
@@ -300,38 +268,8 @@ var resultMarkers = function(members){
   }
 }
 
-/*
-// ======= Global variable to remind us what to do next
-      var nextAddress = 0; // add to data model?
-
-      // ======= Function to call the next Geocode operation when the reply comes back
-
-      function theNext() {
-        if (nextAddress < addresses.length) {
-          setTimeout('getAddress("'+addresses[nextAddress]+'",theNext)', delay);
-          nextAddress++;
-        } else {
-          // We're done. Show map bounds
-          map.fitBounds(bounds);
-        }
-      }
-
-      function getNextAddress() {
-        if (nextAddress < addresses.length) {
-          setTimeout('getAddress("'+addresses[nextAddress]+'",getNextAddress)', delay);
-          nextAddress++;
-        } //else {
-          // We're done. Show map bounds
-          //map.fitBounds(bounds);
-        //}
-      }
-
-      // ======= Call that function for the first time =======
-      theNext();
-*/
-
 //----
 
 var myMarkers = new resultMarkers(markersModel);
 ko.applyBindings(myMarkers);
-google.maps.event.addDomListener(window, 'load', myMarkers.addAllMarkers);
+google.maps.event.addDomListener(window, 'load', myMarkers.initialize);
