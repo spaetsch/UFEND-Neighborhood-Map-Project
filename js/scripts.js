@@ -201,6 +201,7 @@ var resultMarkers = function(members){
               location.marker.position = results[0].geometry.location;
             }  );
         }, 3000); //--setTimeout
+        
       } else {
         console.log("in status ERROR ", location.title, "is", status); 
         //DISPLAY ERROR ON SCREEN
