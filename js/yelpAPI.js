@@ -1,11 +1,13 @@
 
+//Uses phone number from data model to retrieve data from Yelp.
+
 var yelpRequest = function(phoneNumber, callback){
 
   var auth = { 
     consumerKey: "tnPXnHuDdh144CTpe-iHKA", 
     consumerSecret: "AQidIB9YBo7kjk5K2ulOBlqdE0A",
     accessToken: "HcamZ5izqoZG6JYmaHY2KwyQBPH2BtiU",
-    // You wouldn't actually want to expose your access token secret like this in a real application.
+    // For class exercise only. For a real application, you would not expose your tokens and secrets
     accessTokenSecret: "mrsNPAzeX_Lg8nMrvf9dxLdNPYE",
     serviceProvider: { 
       signatureMethod: "HMAC-SHA1"
@@ -27,7 +29,7 @@ var yelpRequest = function(phoneNumber, callback){
   myParameters.push(['oauth_signature_method', 'HMAC-SHA1']);
 
   var myMessage = {
-    'action': 'http://api.yelp.com/v2/phone_search',
+    'action': 'http://api.yelp.com/v2/phone_search', //Uses Yelp API Phone Search. 
     'method': 'GET',
     'parameters': myParameters 
   }
@@ -47,8 +49,8 @@ var yelpRequest = function(phoneNumber, callback){
       callback(data.businesses[0]);
     }
   }).fail(function(e){
-    $('#yelpWindow').text("Error: Yelp data could not be loaded");
-  });
+    $('#yelpWindow').text("Error: Yelp data could not be loaded");  //Error handling - Display error message
+  });                                                               //in infowindow if the ajax request does not succeed.
 }
 
 

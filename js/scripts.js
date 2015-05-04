@@ -1,3 +1,5 @@
+
+//Error handling - checks if Google Maps has loaded
 if(!window.google || !window.google.maps){
       $('#map-container').text("Error: Google Maps data could not be loaded");
       $('#map-list').text("Error: Google Maps data could not be loaded");
@@ -8,13 +10,13 @@ if(!window.google || !window.google.maps){
 var markersModel = [
   {
     title: "5 Spot",
-    category: "restaurant",
+    category: "restaurant",                         // category for search field
     address: "1502 Queen Anne Ave N., Seattle, WA", // street address for use by Google Maps geocoder
     phone:"(206) 285-7768",                         // phone number for use by Yelp API
-    status: ko.observable("OK"),
+    status: ko.observable("OK"),                    // change status if error message received from Yelp
     marker : new google.maps.Marker({               // google maps marker object
       position: new google.maps.LatLng(0,0),          // set initial position to (0,0)
-      icon: "img/pins/restaurant.png",
+      icon: "img/pins/restaurant.png"                 // category icon for map pin
     }) 
   },
   {
@@ -25,7 +27,7 @@ var markersModel = [
     status: ko.observable("OK"),
     marker : new google.maps.Marker({
       position: new google.maps.LatLng(0,0),
-      icon: "img/pins/coffee.png",
+      icon: "img/pins/coffee.png"
     }) 
   },
    {
@@ -36,18 +38,7 @@ var markersModel = [
     status: ko.observable("OK"),
     marker : new google.maps.Marker({
       position: new google.maps.LatLng(0,0),
-      icon: "img/pins/coffee.png",
-    }) 
-  },
-   {
-    title: "BAD ADDRESS DATA ",
-    category: "restaurant",
-    address: "plergh",                        // bad data for testing
-    phone:"(206) 285-7768",  
-    status: ko.observable("OK"),                       
-    marker : new google.maps.Marker({               
-      position: new google.maps.LatLng(0,0),          
-      icon: "img/pins/restaurant.png"                 
+      icon: "img/pins/coffee.png"
     }) 
   },
   {
@@ -163,30 +154,33 @@ var resultMarkers = function(members){
 
   self.map = new google.maps.Map(document.getElementById('map-container'), self.mapOptions);
 
-  self.searchReq = ko.observable("");
+  self.searchReq = ko.observable("");     //user input to Search box
 
+  // Filtered version of data model, based on Search input
   self.filteredMarkers = ko.computed(function() {
-    //remove all markers from map
+    //Remove all markers from map
     for (current in members) {
         members[current].marker.setMap(null);
     }
-    //place only the markers that match search request
+    //Place only the markers that match search request
     var arrayResults = [];
     arrayResults =  $.grep(members, function(a) {  
       var titleSearch = a.title.toLowerCase().indexOf(self.searchReq().toLowerCase());
       var catSearch = a.category.toLowerCase().indexOf(self.searchReq().toLowerCase());   
       return ((titleSearch > -1 || catSearch > -1) && a.status() === "OK")  
     });
-    //iterate thru results, set animation timeout for each
+    //Iterate thru results, set animation timeout for each
     for (item in arrayResults){
       (function f(){
         var i = item;
         setTimeout(function(){(arrayResults[i].marker.setMap(self.map))}, i * 300);
       }());
     }
+    //Return list of locations that match search request, for button list
     return arrayResults;
   });
   
+  //Use street address in model to find LatLng
   self.setPosition = function(location){
     geocoder = new google.maps.Geocoder();
     //use address to find LatLng with geocoder
@@ -195,31 +189,33 @@ var resultMarkers = function(members){
         location.marker.position = results[0].geometry.location;
         location.marker.setAnimation(google.maps.Animation.DROP);
       } else if (status === "OVER_QUERY_LIMIT"){
-        //timeout re-request
+        // If status is OVER_QUERY_LIMIT, then wait and re-request
         setTimeout(function(){
           geocoder.geocode({ 'address': location.address }, function(results, status) { 
               location.marker.position = results[0].geometry.location;
             }  );
-        }, 3000); //--setTimeout
+        }, 3000); 
         
       } else {
-        console.log("in status ERROR ", location.title, "is", status); 
-        //DISPLAY ERROR ON SCREEN
+        //If status is any other error code, then set status to Error, which will remove it from list and map    
         location.status("ERROR");
+        //Log error information to console
+        console.log("Error code: ", status, "for Location:", location.title);
       }  
     });
-  }//--setPosition
+  }
   
+  //Adds infowindows to each marker and populates them with Yelp API request data
   self.setBubble = function(index){    
-        //add event listener to each map marker to trigger the corresponding infowindow on click
+        //Add event listener to each map marker to trigger the corresponding infowindow on click
         google.maps.event.addListener(members[index].marker, 'click', function() {
             var infowindow = new google.maps.InfoWindow({
               content: "<div id='yelpWindow'></div>" ,
               maxWidth: 250
             });
 
+            //Request Yelp info, then format it, and place it in infowindow
             yelpRequest(members[index].phone, function(data){
-              console.log("wtf is index:", index);
               var contentString = "<div id='yelpWindow'>" +
                                   "<h5>" +  "<a href='" + data.mobile_url + "' target='_blank'>" +data.name + "</a>" + "</h5>" + 
                                   "<p>" + data.location.address + "</p>" +
@@ -233,6 +229,7 @@ var resultMarkers = function(members){
           });
   }
 
+  //Iterate through data model, get LatLng location then set up infowindow
   self.initialize = function(){
     for (current in members){    
       self.setPosition(members[current]);
@@ -240,7 +237,7 @@ var resultMarkers = function(members){
     } 
   }
 
-  //toggle bounce animation on click (data-binding)
+  //Toggle bounce animation for map marker on click of Location list button (via data-binding)
   self.toggleBounce = function(currentMarker) {
     if (currentMarker.marker.getAnimation() != null) {
       currentMarker.marker.setAnimation(null);

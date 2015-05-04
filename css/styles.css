@@ -2,34 +2,28 @@ body {
 	background-color:#CCC; 
 	height: 100% }
 
-#map-outer {  height: 100%; 
-	  		padding: 20px; 
-			border: 2px solid #CCC; 
-			margin-bottom: 20px; 
-			background-color:#FFF }
+#map-outer {  
+	height: 100%; 
+	padding: 20px; 
+	border: 2px solid #CCC; 
+	margin-bottom: 20px; 
+	background-color:#FFF }
 	  
 #map-container { height: 650px }
 
-#format { margin-top: 2em; }
+#format { margin-top: 2em }
 
-  button {
+#titlebar {
+	padding: 40px; 
+	border: 2px solid #CCC; 
+	background-color:#5123cf;
+	color:white;}
+
+#search-field{ color:black }
+
+button {
     margin: 0;
     padding: 0;
     height: 40px;
     width: 100%;
-    vertical-align: middle;
-}
-
-
-
-/* Extra small devices (phones, less than 768px) */
-/* No media query since this is the default in Bootstrap */
-
-/* Small devices (tablets, 768px and up) */
-@media (min-width: @screen-sm-min) { ... }
-
-/* Medium devices (desktops, 992px and up) */
-@media (min-width: @screen-md-min) { ... }
-
-/* Large devices (large desktops, 1200px and up) */
-@media (min-width: @screen-lg-min) { ... }
+    vertical-align: middle }
