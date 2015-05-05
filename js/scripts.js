@@ -13,7 +13,7 @@ var markersModel = [
     category: "restaurant",                         // category for search field
     address: "1502 Queen Anne Ave N., Seattle, WA", // street address for use by Google Maps geocoder
     phone:"(206) 285-7768",                         // phone number for use by Yelp API
-    status: ko.observable("OK"),                    // change status if error message received from Yelp
+    status: ko.observable("OK"),                                              // change status if error message received from Yelp
     marker : new google.maps.Marker({               // google maps marker object
       position: new google.maps.LatLng(0,0),          // set initial position to (0,0)
       icon: "img/pins/restaurant.png"                 // category icon for map pin
@@ -159,8 +159,10 @@ var resultMarkers = function(members){
   // Filtered version of data model, based on Search input
   self.filteredMarkers = ko.computed(function() {
     //Remove all markers from map
+
     for (current in members) {
         members[current].marker.setMap(null);
+        clearTimeout(members[current].timer);
     }
     //Place only the markers that match search request
     var arrayResults = [];
@@ -172,8 +174,10 @@ var resultMarkers = function(members){
     //Iterate thru results, set animation timeout for each
     for (item in arrayResults){
       (function f(){
-        var i = item;
-        setTimeout(function(){(arrayResults[i].marker.setMap(self.map))}, i * 300);
+        var i = item; 
+        console.log("arrayResults[i].title", arrayResults[i].title);
+        var animTimer = setTimeout(function(){(arrayResults[i].marker.setMap(self.map))}, i * 300);
+        arrayResults[i].timer = animTimer;
       }());
     }
     //Return list of locations that match search request, for button list
