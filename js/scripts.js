@@ -244,6 +244,7 @@ var resultMarkers = function(members){
     if (currentMarker.marker.getAnimation() !== null) {
       currentMarker.marker.setAnimation(null);
     } else {
+      self.map.setCenter(currentMarker.marker.position);       //center map on bouncing marker
       currentMarker.marker.setAnimation(google.maps.Animation.BOUNCE);
       setTimeout(function(){currentMarker.marker.setAnimation(null)}, 2800); //bounce for 2800 ms
     }
