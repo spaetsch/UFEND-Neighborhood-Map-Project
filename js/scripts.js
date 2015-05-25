@@ -153,10 +153,7 @@ var resultMarkers = function(members){
 
   self.map = new google.maps.Map(document.getElementById('map-container'), self.mapOptions);
 
-  self.infowindow = new google.maps.InfoWindow({
-      maxWidth:250
-    }
-    );
+  self.infowindow = new google.maps.InfoWindow({ maxWidth:250 });
 
   self.searchReq = ko.observable("");     //user input to Search box
 
@@ -218,7 +215,6 @@ var resultMarkers = function(members){
 
       //Request Yelp info, then format it, and place it in infowindow
       yelpRequest(members[index].phone, function(data){
-        console.log("contentString", contentString);
         var contentString = "<div id='yelpWindow'>" +
                             "<h5>" +  "<a href='" + data.mobile_url + "' target='_blank'>" +data.name + "</a>" + "</h5>" +
                             "<p>" + data.location.address + "</p>" +
@@ -237,13 +233,9 @@ var resultMarkers = function(members){
   self.initialize = function(){
     for (var current in members){
       self.setPosition(members[current]);
-
-
-
-      self.setBubble(current);  //instead of init with own bubble, move position on call?
+      self.setBubble(current);
     }
   };
-
 
   //Toggle bounce animation for map marker on click of Location list button (via data-binding)
   self.toggleBounce = function(currentMarker) {
