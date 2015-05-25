@@ -215,6 +215,9 @@ var resultMarkers = function(members){
 
       //Request Yelp info, then format it, and place it in infowindow
       yelpRequest(members[index].phone, function(data){
+
+        //Can you clarify the following code review comment on this segment?
+        //"This text template is one part of View so you can move it into index.html."
         var contentString = "<div id='yelpWindow'>" +
                             "<h5>" +  "<a href='" + data.mobile_url + "' target='_blank'>" +data.name + "</a>" + "</h5>" +
                             "<p>" + data.location.address + "</p>" +
