@@ -153,12 +153,16 @@ var resultMarkers = function(members){
 
   self.map = new google.maps.Map(document.getElementById('map-container'), self.mapOptions);
 
+  self.infowindow = new google.maps.InfoWindow({
+      maxWidth:250
+    }
+    );
+
   self.searchReq = ko.observable("");     //user input to Search box
 
   // Filtered version of data model, based on Search input
   self.filteredMarkers = ko.computed(function() {
     //Remove all markers from map
-
     for (var current in members) {
         members[current].marker.setMap(null);
         clearTimeout(members[current].timer);
@@ -209,35 +213,37 @@ var resultMarkers = function(members){
 
   //Adds infowindows to each marker and populates them with Yelp API request data
   self.setBubble = function(index){
-        //Add event listener to each map marker to trigger the corresponding infowindow on click
-        google.maps.event.addListener(members[index].marker, 'click', function() {
-            var infowindow = new google.maps.InfoWindow({
-              content: "<div id='yelpWindow'></div>" ,
-              maxWidth: 250
-            });
+    //Add event listener to each map marker to trigger the corresponding infowindow on click
+    google.maps.event.addListener(members[index].marker, 'click', function () {
 
-            //Request Yelp info, then format it, and place it in infowindow
-            yelpRequest(members[index].phone, function(data){
-              var contentString = "<div id='yelpWindow'>" +
-                                  "<h5>" +  "<a href='" + data.mobile_url + "' target='_blank'>" +data.name + "</a>" + "</h5>" +
-                                  "<p>" + data.location.address + "</p>" +
-                                  "<p>" + data.display_phone + "</p>" +
-                                  "<img src='" + data.rating_img_url_large + "'>" +
-                                  "<p>" + data.snippet_text + "</p>" +
-                                  "</div>";
-              infowindow.setContent(contentString);
-            });
-            infowindow.open(self.map, members[index].marker);
-          });
-  };
+      //Request Yelp info, then format it, and place it in infowindow
+      yelpRequest(members[index].phone, function(data){
+        console.log("contentString", contentString);
+        var contentString = "<div id='yelpWindow'>" +
+                            "<h5>" +  "<a href='" + data.mobile_url + "' target='_blank'>" +data.name + "</a>" + "</h5>" +
+                            "<p>" + data.location.address + "</p>" +
+                            "<p>" + data.display_phone + "</p>" +
+                            "<img src='" + data.rating_img_url_large + "'>" +
+                            "<p>" + data.snippet_text + "</p>" +
+                            "</div>";
+        self.infowindow.setContent(contentString);
+      });
 
+      self.infowindow.open(self.map, members[index].marker);
+  });
+};
+//});
   //Iterate through data model, get LatLng location then set up infowindow
   self.initialize = function(){
     for (var current in members){
       self.setPosition(members[current]);
-      self.setBubble(current);
+
+
+
+      self.setBubble(current);  //instead of init with own bubble, move position on call?
     }
   };
+
 
   //Toggle bounce animation for map marker on click of Location list button (via data-binding)
   self.toggleBounce = function(currentMarker) {
