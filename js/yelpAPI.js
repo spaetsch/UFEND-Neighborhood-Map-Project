@@ -1,6 +1,4 @@
-
 //Uses phone number from data model to retrieve data from Yelp.
-
 var yelpRequest = function(phoneNumber, callback){
 
   var auth = {
@@ -52,6 +50,3 @@ var yelpRequest = function(phoneNumber, callback){
     $('#yelpWindow').text("Error: Yelp data could not be loaded");  //Error handling - Display error message
   });                                                               //in infowindow if the ajax request does not succeed.
 };
-
-
-
