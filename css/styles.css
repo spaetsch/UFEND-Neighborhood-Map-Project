@@ -1,39 +1,31 @@
 body {
-	background-color:#CCC;
-	height: 100%
+  background-color: #ccc;
+  height: 100%
 }
 
-#map-outer {
-	height: 100%;
-	padding: 20px;
-	border: 2px solid #CCC;
-	margin-bottom: 20px;
-	background-color:#FFF
+.map-outer {
+  height: 100%;
+  padding: 20px;
+  border: 2px solid #ccc;
+  margin-bottom: 20px;
+  background-color: #fff
 }
 
-#map-container {
-	height: 650px
+.map-container {
+  height: 650px
 }
 
-#format {
-	margin-top: 2em
-}
-
-#titlebar {
-	padding: 40px;
-	border: 2px solid #CCC;
-	background-color:#5123cf;
-	color:white;
-}
-
-#search-field {
-	color:black
+.titlebar {
+  padding: 40px;
+  border: 2px solid #ccc;
+  background-color: #5123cf;
+  color: white
 }
 
 button {
-    margin: 0;
-    padding: 0;
-    height: 40px;
-    width: 100%;
-    vertical-align: middle
+  margin: 0;
+  padding: 0;
+  height: 40px;
+  width: 100%;
+  vertical-align: middle
 }

@@ -151,7 +151,9 @@ var resultMarkers = function(members){
       zoom: 15
     };
 
-  self.map = new google.maps.Map(document.getElementById('map-container'), self.mapOptions);
+    var mapCont = document.getElementsByClassName('map-container');
+
+  self.map = new google.maps.Map(mapCont[0], self.mapOptions);
 
   self.infowindow = new google.maps.InfoWindow({ maxWidth:250 });
 

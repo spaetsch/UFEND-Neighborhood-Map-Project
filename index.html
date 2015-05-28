@@ -2,12 +2,12 @@
 
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<title>Queen Anne Neighborhood Map</title>
-	<meta name="description" content="Neighborhood Map">
-	<meta name="author" content="Sarah Paetsch">
-	<meta name="viewport" content="width=device-width">
-  
+  <meta charset="utf-8">
+  <title>Queen Anne Neighborhood Map</title>
+  <meta name="description" content="Neighborhood Map">
+  <meta name="author" content="Sarah Paetsch">
+  <meta name="viewport" content="width=device-width">
+
   <script type="text/javascript"
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD66VY78WBNPsvhYujsJK2uacxLVPfWpRo">
   </script>
@@ -17,36 +17,36 @@
   <script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/sha1.js"></script>
   <script src="js/yelpAPI.js"></script>
 
- 	<link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
 
 <div class="container">
-  <div id="title-outer" class="col-md-12 col-xs-12">
+  <div class="title-outer col-xs-12">
     <div class="row">
-      <div id="titlebar" class="col-md-12 col-xs-12">
+      <div class="titlebar col-xs-12">
         <h3>Queen Anne Neighborhood Map</h3>
-        <div id="searchbox">Search: <input id="search-field" data-bind="textInput: searchReq"></div> 
+        <div>Search: <input class="search-field" data-bind="textInput: searchReq"></div>
       </div>
     </div>
   </div>
-  <div id="map-outer" class="col-md-12 col-xs-12">  
-    <div class="row">   
-      <div id="sidebar" class="col-md-3 col-xs-4">       
+  <div class="map-outer col-xs-12">
+    <div class="row">
+      <div class="sidebar col-xs-4">
         <p>Locations:</p>
-        <div id="loc-list" data-bind="foreach: filteredMarkers">
+        <div class="loc-list" data-bind="foreach: filteredMarkers">
           <button data-bind="text: title, click: myMarkers.toggleBounce"></button><br>
         </div>
       </div> <!--sidebar-->
 
-      <div id="map-container" class="col-md-9 col-xs-8"> </div>
-    
-    </div><!--row-->  
+      <div class="map-container col-xs-8"> </div>
+
+    </div><!--row-->
   </div><!--map-outer-->
 </div><!--container-->
-        
+
 <script src="js/scripts.js"></script>
 
 </body>
