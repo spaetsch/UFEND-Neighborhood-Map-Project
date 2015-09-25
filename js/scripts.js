@@ -149,7 +149,7 @@ var resultMarkers = function(members){
 
   self.mapOptions = {
     center: new google.maps.LatLng(47.641437, -122.360834), //set map center in Queen Anne
-    zoom: 15
+    zoom: 14
   };
 
   var mapCont = document.getElementsByClassName('map-container');
@@ -198,11 +198,13 @@ var resultMarkers = function(members){
         location.marker.setAnimation(google.maps.Animation.DROP);
       } else if (status === 'OVER_QUERY_LIMIT'){
         // If status is OVER_QUERY_LIMIT, then wait and re-request
+        console.log("in over limit");
         setTimeout(function(){
           geocoder.geocode({ 'address': location.address }, function(results, status) {
               location.marker.position = results[0].geometry.location;
+              location.marker.setAnimation(google.maps.Animation.DROP);
             });
-        }, 3000);
+        }, 4000);
 
       } else {
         //If status is any other error code, then set status to Error, which will remove it from list and map
