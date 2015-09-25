@@ -204,7 +204,7 @@ var resultMarkers = function(members){
               location.marker.position = results[0].geometry.location;
               location.marker.setAnimation(google.maps.Animation.DROP);
             });
-        }, 4000);
+        }, 2000);
 
       } else {
         //If status is any other error code, then set status to Error, which will remove it from list and map
